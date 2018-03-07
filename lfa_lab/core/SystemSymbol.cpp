@@ -29,7 +29,7 @@ SystemSymbol::SystemSymbol(int rows,
   : m_output_clusters(output_clusters),
     m_input_clusters(input_clusters)
 {
-    resize(rows, cols);
+  resize(rows, cols);
 }
 
 SystemSymbol SystemSymbol::Identity(int rows,
@@ -131,7 +131,7 @@ SystemSymbol SystemSymbol::inverse() const
 
     SystemClusterSymbol aux_inv = aux.inverse();
 
-    // Assert that we really compted the inverse
+    // Assert that we really computed the inverse
     MatrixXcd expected_id = aux_inv.matrix() * aux.matrix();
     if ( (expected_id -
           MatrixXcd::Identity(aux.matrix().rows(),

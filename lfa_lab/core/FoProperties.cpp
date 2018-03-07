@@ -14,7 +14,7 @@
 
   You should have received a copy of the GNU General Public License along
   with this program; if not, write to the Free Software Foundation, Inc.,
-  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
 #include "FoProperties.h"
@@ -25,7 +25,7 @@ namespace lfa {
       SplitFrequencyDomain output_domain,
       SplitFrequencyDomain input_domain)
     : m_output_domain(output_domain),
-    m_input_domain(input_domain)
+      m_input_domain(input_domain)
   {
 
   }
@@ -46,7 +46,7 @@ namespace lfa {
 
   FoProperties FoProperties::operator* (const FoProperties& other)
   {
-    // ToDo simplify this
+    // ToDo simplify this code
     ArrayFi lcc = m_input_domain.lcc(other.m_output_domain);
     FoProperties this_ex = this->expandInputTo(lcc);
     FoProperties other_ex = other.expandOutputTo(lcc);

@@ -17,30 +17,26 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef SAMPLING_PROPERTIES_H
-#define SAMPLING_PROPERTIES_H
+#ifndef SYSTEM_STENCIL_PROPERTIES
+#define SYSTEM_STENCIL_PROPERTIES
 
 #include "Common.h"
-#include "Grid.h"
+#include "MatrixContainer.h"
+#include "HarmonicClusters.h"
+#include "FoProperties.h"
+#include <vector>
 
 namespace lfa {
 
-  class SamplingProperties {
+  class SystemStencilProperties {
     public:
-      /** Set finest_resolution and compute the default base_frequency.
-       * @param grid Is an arbitrary grid from the grid hierarchy.
-       */
-      SamplingProperties(ArrayFi finest_resolution, Grid grid);
-      SamplingProperties(ArrayFi finest_resolution, ArrayFd base_frequency);
+      SystemStencilProperties(MatrixContainer<FoProperties> input_properties);
 
-      /** Resolution on the finest grid. */
-      const ArrayFi& finest_resolution() const { return m_finest_resolution; }
-      const ArrayFd& base_frequency() const { return m_base_frequency; }
     private:
-      ArrayFi m_finest_resolution; /// < The resolution on the finest grid.
-      ArrayFd m_base_frequency;
+      vector<HarmonicClusters> m_rows_of_rows;
+      vector<HarmonicClusters> m_cols_of_cols;
   };
 
 }
 
-#endif // SAMPLING_PROPERTIES_H
+#endif

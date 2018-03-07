@@ -27,7 +27,12 @@
 
 namespace lfa {
 
-  /** Indexing for the harmonics. */
+  /** Indexing for the harmonics.
+   *
+   * A harmonic cluster is a description for the rows or columns of a Fourier
+   * matrix symbol. The base_shape is the index range for the sampling points,
+   * while the cluster_shape is the index range for the rows/columns.
+   */
   class HarmonicClusters {
     public:
       explicit HarmonicClusters(ArrayFi base_shape = ArrayFi::Zero(0),
