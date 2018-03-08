@@ -15,31 +15,17 @@
   You should have received a copy of the GNU General Public License along
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+  vim: set filetype=cpp:
 */
 
-#ifndef SYSTEM_STENCIL_PROPERTIES
-#define SYSTEM_STENCIL_PROPERTIES
+class SystemSymbolProperties {
+  public:
+    SystemSymbolProperties(int rows,
+                           int cols,
+                           FoProperties element_properties);
+};
 
-#include "Common.h"
-#include "MatrixContainer.h"
-#include "FoProperties.h"
-#include <vector>
+SystemSymbolProperties properties_of_symbol_system(
+  MatrixContainer<FoProperties> properties);
 
-namespace lfa {
-
-  class SystemSymbolProperties {
-    public:
-      SystemSymbolProperties(int rows,
-                             int cols,
-                             FoProperties element_properties);
-    private:
-      int m_rows; /// < number of rows
-      int m_cols; /// < number of columns
-      FoProperties m_element_properties;
-  };
-
-  SystemSymbolProperties properties_of_symbol_system(
-    MatrixContainer<FoProperties> properties);
-}
-
-#endif

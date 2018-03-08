@@ -18,5 +18,42 @@
 */
 
 #include "SystemSymbolProperties.h"
+#include "MathUtil.h"
 
+namespace lfa {
+
+SystemSymbolProperties::SystemSymbolProperties(
+  int rows,
+  int cols,
+  FoProperties element_properties)
+  : m_rows(rows),
+    m_cols(cols),
+    m_element_properties(element_properties)
+{
+
+}
+
+SystemSymbolProperties properties_of_symbol_system(
+  MatrixContainer<FoProperties> properties)
+{
+  if (properties.cols() <= 0 || properties.rows() <= 0) {
+    throw std::logic_error("System has zero rows or columns, which is not allowed.");
+  }
+
+  // ensure that all operators have the same outputs and same inputs
+  for (int i=0; i < properties.rows(); ++i) {
+    for (int j=0; j < properties.cols(); ++j) {
+      if (properties(0,0).input() != properties(i,j).input()) {
+        throw logic_error("Inputs are not homogeneous.");
+      }
+      if (properties(0,0).output() != properties(i,j).output()) {
+        throw logic_error("Outputs are not homogeneous.");
+      }
+    }
+  }
+
+
+}
+
+}
 

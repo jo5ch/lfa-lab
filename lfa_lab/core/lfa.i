@@ -69,6 +69,7 @@ using namespace lfa;
 %include "ConstantSb.i"
 %include "BlockStencil.i"
 %include "HpFilterSb.i"
+%include "SystemSymbolProperties.i"
 
 // =========================================================
 
