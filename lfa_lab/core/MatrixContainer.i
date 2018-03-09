@@ -18,3 +18,35 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
+
+template <typename T>
+class MatrixContainer
+{
+  public:
+    MatrixContainer(int nrows = 0, int ncols = 0);
+
+    T& operator() (int row, int col);
+
+    void resize(int rows, int cols);
+
+    int rows() const;
+    int cols() const;
+
+    bool empty() const;
+
+    %extend {
+      T __getitem__(int i, int j) {
+        return (*$self)(i, j);
+      }
+
+      void __setitem__(ArrayFi p, T value) {
+        if (p.rows() != 2) {
+          throw std::logic_error("Invalid index length.");
+        }
+        (*$self)(p[0], p[1]) = value;
+      }
+    }
+};
+
+

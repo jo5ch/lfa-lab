@@ -32,6 +32,16 @@ namespace lfa {
       SystemSymbolProperties(int rows,
                              int cols,
                              FoProperties element_properties);
+
+      SystemSymbolProperties operator* (const SystemSymbolProperties& other) const;
+      SystemSymbolProperties operator+ (const SystemSymbolProperties& other) const;
+      friend SystemSymbolProperties operator* (double scalar, const SystemSymbolProperties& other);
+      SystemSymbolProperties operator- (const SystemSymbolProperties& other) const {
+        return (*this) + (-1) * other;
+      }
+
+      SystemSymbolProperties inverse() const;
+      SystemSymbolProperties adjoint() const;
     private:
       int m_rows; /// < number of rows
       int m_cols; /// < number of columns

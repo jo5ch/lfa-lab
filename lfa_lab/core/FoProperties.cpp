@@ -30,7 +30,7 @@ namespace lfa {
 
   }
 
-  FoProperties FoProperties::operator+ (const FoProperties& other)
+  FoProperties FoProperties::operator+ (const FoProperties& other) const
   {
     ArrayFi lcc = m_input_domain.lcc(other.m_input_domain);
     FoProperties this_ex = this->expandInputTo(lcc);
@@ -44,7 +44,7 @@ namespace lfa {
     return this_ex;
   }
 
-  FoProperties FoProperties::operator* (const FoProperties& other)
+  FoProperties FoProperties::operator* (const FoProperties& other) const
   {
     // ToDo simplify this code
     ArrayFi lcc = m_input_domain.lcc(other.m_output_domain);
@@ -64,12 +64,12 @@ namespace lfa {
     return FoProperties(this_ex.m_output_domain, other_ex.m_input_domain);
   }
 
-  FoProperties FoProperties::inverse()
+  FoProperties FoProperties::inverse() const
   {
     return FoProperties(m_input_domain, m_output_domain);
   }
 
-  FoProperties FoProperties::adjoint()
+  FoProperties FoProperties::adjoint() const
   {
     return FoProperties(m_input_domain, m_output_domain);
   }

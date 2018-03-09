@@ -1,4 +1,6 @@
 /*
+  vim: set filetype=cpp:
+
   LFA Lab - Library to simplify local Fourier analysis.
   Copyright (C) 2018  Hannah Rittich
 
@@ -15,17 +17,31 @@
   You should have received a copy of the GNU General Public License along
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-  vim: set filetype=cpp:
 */
+
+%import "MatrixContainer.i"
 
 class SystemSymbolProperties {
   public:
     SystemSymbolProperties(int rows,
                            int cols,
                            FoProperties element_properties);
+
+    SystemSymbolProperties operator* (const SystemSymbolProperties& other) const;
+    SystemSymbolProperties operator+ (const SystemSymbolProperties& other) const;
+
+    SystemSymbolProperties inverse() const;
+    SystemSymbolProperties adjoint() const;
+
+    %extend {
+      SystemSymbolProperties __rmul__ (double scalar) {
+        return scalar * (*$self);
+      }
+    }
 };
 
 SystemSymbolProperties properties_of_symbol_system(
   MatrixContainer<FoProperties> properties);
+
+%template(FoPropertiesMatrix) MatrixContainer<FoProperties>;
 

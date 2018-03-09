@@ -28,25 +28,24 @@ namespace lfa {
   class FoProperties {
     public:
       FoProperties(
-          SplitFrequencyDomain output_domain,
-          SplitFrequencyDomain input_domain);
+          SplitFrequencyDomain output_domain = SplitFrequencyDomain(),
+          SplitFrequencyDomain input_domain = SplitFrequencyDomain());
 
-      FoProperties operator+ (const FoProperties& other);
-      FoProperties operator- (const FoProperties& other) {
+      FoProperties operator+ (const FoProperties& other) const;
+      FoProperties operator- (const FoProperties& other) const {
         return (*this) + other;
       }
 
-      friend FoProperties operator* (
-          complex<double> scalar,
-          const FoProperties& self)
+      friend FoProperties operator* (complex<double> scalar,
+                                     const FoProperties& self)
       {
         return self;
       }
 
-      FoProperties operator* (const FoProperties& other);
+      FoProperties operator* (const FoProperties& other) const;
 
-      FoProperties inverse();
-      FoProperties adjoint();
+      FoProperties inverse() const;
+      FoProperties adjoint() const;
 
       Grid outputGrid() { return m_output_domain.grid(); }
       Grid inputGrid() { return m_input_domain.grid(); }

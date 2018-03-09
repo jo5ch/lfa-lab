@@ -28,7 +28,7 @@ __all__ = [
     'FlatRestritionNode',
     'ZeroNode',
     'HpFilterNode',
-    'LpFilterNode'
+    'SystemNode'
 ]
 
 default_resolution = 32
@@ -182,6 +182,15 @@ class IdentityNode(Node):
     def compute_symbol(self):
         self._symbol = Symbol.Identity(self._grid, self.configuration)
 
+    def diag(self):
+        return self
+
+    def upper(self):
+        return ZeroNode(self._grid)
+
+    def lower(self):
+        return ZeroNode(self._grid)
+
 class ZeroNode(Node):
 
     def __init__(self, grid):
@@ -194,6 +203,15 @@ class ZeroNode(Node):
 
     def compute_symbol(self):
         self._symbol = Symbol.Zero(self._grid, self.configuration)
+
+    def diag(self):
+        return self
+
+    def upper(self):
+        return self
+
+    def lower(self):
+        return self
 
 class GeneratorNode(Node):
     """
@@ -323,7 +341,6 @@ class NodeAdjoint(Node):
         self._symbol = self._other._symbol.adjoint()
 
 
-
 class BlockNode(Node):
 
     def __init__(self, scalars):
@@ -387,11 +404,36 @@ class HpFilterNode(GeneratorNode):
         super(HpFilterNode, self).__init__(
                 HpFilterSb(fine_grid, coarse_grid))
 
+class SystemNode(Node):
+    """System of symbols."""
 
-def LpFilterNode(fine_grid, coarse_grid):
-    """Low pass filter symbol."""
-    I = IdentityNode(fine_grid)
-    HP = HpFilterNode(fine_grid, coarse_grid)
-    return I - HP
+    def __init__(self, entries):
+        super(SystemNode, self).__init__()
+
+        ps = FoPropertiesMatrix(len(entries), len(entries[0]))
+        self.dependencies = []
+        for i in range(ps.rows()):
+            assert(len(entries[i]) == ps.cols())
+            for j in range(ps.cols()):
+                ps[i,j] = entries[i][j].properties
+                self.dependencies.append(entries[i][j])
+
+        self._entries = entries
+        self.properties = properties_of_symbol_system(ps)
+
+    def compute_symbol(self):
+        pass
+
+    def diag(self):
+        new_entries = \
+            map(lambda l: map(lambda e: e.diag(), l), self._entries)
+
+        return SystemNode(new_entries)
+
+    def upper(self):
+        pass
+
+    def lower(self):
+        pass
 
 

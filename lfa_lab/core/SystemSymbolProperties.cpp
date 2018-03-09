@@ -33,6 +33,58 @@ SystemSymbolProperties::SystemSymbolProperties(
 
 }
 
+SystemSymbolProperties
+  SystemSymbolProperties::operator* (const SystemSymbolProperties& other)
+  const
+{
+  if (m_cols != other.m_rows)
+    throw logic_error("Columns and rows of the systems mismatch.");
+
+  return SystemSymbolProperties(m_rows,
+                                other.m_cols,
+                                m_element_properties
+                                  * other.m_element_properties);
+}
+
+SystemSymbolProperties
+  SystemSymbolProperties::operator+ (const SystemSymbolProperties& other)
+  const
+{
+  if (m_cols != other.m_cols || m_rows != other.m_rows)
+    throw logic_error("Rows or columns mismatch.");
+
+  return SystemSymbolProperties(m_rows,
+                                m_cols,
+                                m_element_properties
+                                  + other.m_element_properties);
+}
+
+SystemSymbolProperties
+  operator* (double scalar, const SystemSymbolProperties& other)
+{
+  return other;
+}
+
+SystemSymbolProperties SystemSymbolProperties::inverse() const
+{
+  if (m_rows != m_cols)
+    throw logic_error("Cannot invert non-square system.");
+
+  if (m_element_properties.input() != m_element_properties.output())
+    throw logic_error("Cannot invert system with non-square entries.");
+
+  return SystemSymbolProperties(m_cols,
+                                m_rows,
+                                m_element_properties.inverse());
+}
+
+SystemSymbolProperties SystemSymbolProperties::adjoint() const
+{
+  return SystemSymbolProperties(m_cols,
+                                m_rows,
+                                m_element_properties.adjoint());
+}
+
 SystemSymbolProperties properties_of_symbol_system(
   MatrixContainer<FoProperties> properties)
 {
@@ -52,7 +104,9 @@ SystemSymbolProperties properties_of_symbol_system(
     }
   }
 
-
+  return SystemSymbolProperties(properties.rows(),
+                                properties.cols(),
+                                properties(0,0));
 }
 
 }
