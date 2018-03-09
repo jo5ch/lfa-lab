@@ -42,6 +42,18 @@ namespace lfa {
 
       SystemSymbolProperties inverse() const;
       SystemSymbolProperties adjoint() const;
+
+      int dimension() const { return m_element_properties.dimension(); }
+
+      ArrayFi adjustResolution(ArrayFi desired_resolution) const {
+        return m_element_properties.adjustResolution(desired_resolution);
+      }
+
+      Grid outputGrid() const { return m_element_properties.outputGrid(); }
+      Grid inputGrid() const { return m_element_properties.inputGrid(); }
+
+      int rows() const { return m_rows; }
+      int cols() const { return m_cols; }
     private:
       int m_rows; /// < number of rows
       int m_cols; /// < number of columns

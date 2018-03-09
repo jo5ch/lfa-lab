@@ -422,7 +422,16 @@ class SystemNode(Node):
         self.properties = properties_of_symbol_system(ps)
 
     def compute_symbol(self):
-        pass
+        s = SystemSymbol(self.properties.rows(),
+                         self.properties.cols(),
+                         self._entries[0][0]._symbol.outputClusters(),
+                         self._entries[0][0]._symbol.inputClusters())
+
+        for i in range(self.properties.rows()):
+            for j in range(self.properties.cols()):
+                s[i,j] = self._entries[i][j]._symbol
+
+        self._symbol = s
 
     def diag(self):
         new_entries = \

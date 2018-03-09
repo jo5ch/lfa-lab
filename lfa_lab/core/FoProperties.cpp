@@ -74,7 +74,7 @@ namespace lfa {
     return FoProperties(m_input_domain, m_output_domain);
   }
 
-  ArrayFi FoProperties::adjustResolution(ArrayFi desired_resolution)
+  ArrayFi FoProperties::adjustResolution(ArrayFi desired_resolution) const
   {
     ArrayFi factor =
       m_output_domain.grid().spacing() * m_output_domain.clusterShape();

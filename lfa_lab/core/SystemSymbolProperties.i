@@ -38,6 +38,15 @@ class SystemSymbolProperties {
         return scalar * (*$self);
       }
     }
+
+    int dimension() const;
+    ArrayFi adjustResolution(ArrayFi desired_resolution) const;
+
+    Grid outputGrid() const;
+    Grid inputGrid() const;
+
+    int rows() const;
+    int cols() const;
 };
 
 SystemSymbolProperties properties_of_symbol_system(

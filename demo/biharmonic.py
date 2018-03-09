@@ -8,12 +8,22 @@ Z = operator.zero(grid)
 
 A = SystemNode([[Laplace, I],
                 [Z      , Laplace]])
-print(A)
 
 II = SystemNode([[I, Z], [Z, I]])
-print(II)
 
 D = A.diag()
 
 E = II - D.inverse() * A
+
+symbol = E.symbol()
+
+print("Spectral radius: {}".format(symbol.spectral_radius()))
+print("Spectral norm: {}".format(symbol.spectral_norm()))
+
+plot.plot_2d(symbol[0,0])
+plot.plot_2d(symbol[0,1])
+plot.plot_2d(symbol[1,0])
+plot.plot_2d(symbol[1,1])
+
+mpp.show()
 
