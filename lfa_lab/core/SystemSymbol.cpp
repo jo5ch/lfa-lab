@@ -209,6 +209,26 @@ double SystemSymbol::system_norm() const
   return sqrt(norm_sq);
 }
 
+SystemSymbol combine_symbols_into_system(
+  const SystemSymbolProperties& properties,
+  const MatrixContainer<Symbol>& symbols)
+{
+  if (symbols.rows() <= 0 || symbols.cols() <= 0) {
+    throw std::logic_error("Rows or columns of symbol matrix are zero, which "
+                           "is not allowed");
+  }
+
+  ArrayFi output_cluster_shape = symbols(0,0).outputClusters().shape();
+  ArrayFi output_shape = properties.element_properties().output().clusterShape();
+  HarmonicClusters output_clusters(output_cluster_shape, output_shape / output_cluster_shape);
+
+  ArrayFi input_cluster_shape = symbols(0,0).inputClusters().shape();
+  ArrayFi input_shape = properties.element_properties().input().clusterShape();
+  HarmonicClusters input_clusters(input_cluster_shape, input_shape / input_cluster_shape);
+
+  // todo ..
+}
+
 
 }
 

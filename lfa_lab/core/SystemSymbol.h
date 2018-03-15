@@ -23,6 +23,8 @@
 #include "Common.h"
 #include "Symbol.h"
 #include "SystemClusterSymbol.h"
+#include "MatrixContainer.h"
+#include "SystemSymbolProperties.h"
 
 namespace lfa {
 
@@ -79,6 +81,10 @@ namespace lfa {
 
       vector<vector<Symbol> > m_store;
   };
+
+  SystemSymbol combine_symbols_into_system(
+    const SystemSymbolProperties& properties,
+    const MatrixContainer<Symbol>& symbols);
 
 }
 

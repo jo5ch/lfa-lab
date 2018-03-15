@@ -98,7 +98,6 @@ namespace lfa {
     result_cluster_index = result_clusters.clusterIndex(global);
   }
 
-
   HarmonicClusters HarmonicClusters::minContainer(const HarmonicClusters& other) const
   {
     ArrayFi l = lcm(this->clusterIndices().shape(),
