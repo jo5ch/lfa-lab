@@ -83,6 +83,13 @@ class Node(object):
         """
         return NodeAdjoint(self)
 
+    def __getitem__(self, index):
+        """Access the element of a system.
+
+        :rtype: Node
+        """
+        return NodeSubscript(self, index)
+
     @property
     def output_grid(self):
         return self.properties.outputGrid()
@@ -340,6 +347,17 @@ class NodeAdjoint(Node):
     def compute_symbol(self):
         self._symbol = self._other._symbol.adjoint()
 
+class NodeSubscript(Node):
+    def __init__(self, container_node, index):
+        super(NodeSubscript, self).__init__()
+
+        self._container_node = container_node
+        self._index = index
+        self.dependencies = [container_node]
+        self.properties = container_node.properties.element_properties()
+
+    def compute_symbol(self):
+        self._symbol = self._container_node._symbol[self._index]
 
 class BlockNode(Node):
 

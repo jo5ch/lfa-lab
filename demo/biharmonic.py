@@ -15,6 +15,8 @@ D = A.diag()
 
 E = II - D.inverse() * A
 
+E00 = E[0,0]
+
 symbol = E.symbol()
 
 print("Spectral radius: {}".format(symbol.spectral_radius()))
@@ -24,6 +26,8 @@ plot.plot_2d(symbol[0,0])
 plot.plot_2d(symbol[0,1])
 plot.plot_2d(symbol[1,0])
 plot.plot_2d(symbol[1,1])
+
+plot.plot_2d(E00.symbol())
 
 mpp.show()
 

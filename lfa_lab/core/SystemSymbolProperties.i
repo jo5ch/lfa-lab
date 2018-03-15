@@ -47,6 +47,8 @@ class SystemSymbolProperties {
 
     int rows() const;
     int cols() const;
+
+    FoProperties element_properties();
 };
 
 SystemSymbolProperties properties_of_symbol_system(

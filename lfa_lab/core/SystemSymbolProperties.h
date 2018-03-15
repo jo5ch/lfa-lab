@@ -54,6 +54,8 @@ namespace lfa {
 
       int rows() const { return m_rows; }
       int cols() const { return m_cols; }
+
+      FoProperties element_properties() { return m_element_properties; }
     private:
       int m_rows; /// < number of rows
       int m_cols; /// < number of columns
