@@ -27,7 +27,7 @@ __all__ = [
     'BlockNode',
     'PeriodicStencilNode',
     'FlatInterpolationNode',
-    'FlatRestritionNode',
+    'FlatRestrictionNode',
     'ZeroNode',
     'HpFilterNode',
     'SystemNode'
@@ -315,19 +315,37 @@ class StencilNode(GeneratorNode):
         return StencilNode(self.stencil.lower(), self.grid)
 
 
-class FlatRestritionNode(GeneratorNode):
+class FlatRestrictionNode(GeneratorNode):
+    __slots__ = 'output_grid'
 
     def __init__(self, output_grid, input_grid):
         gen = flat_restriction_sb(output_grid, input_grid)
+        self.output_grid = output_grid
 
-        super(FlatRestritionNode, self).__init__(gen)
+        super(FlatRestrictionNode, self).__init__(gen)
+
+    def matching_identity(self):
+        raise Exception('No matching identity available.')
+
+    def matching_zero(self):
+        # ToDo: Create a proper ZeroNode between two grids
+        return ZeroNode(self.output_grid) * self
 
 class FlatInterpolationNode(GeneratorNode):
+    __slots__ = 'output_grid'
 
     def __init__(self, output_grid, input_grid):
         gen = flat_interpolation_sb(output_grid, input_grid)
+        self.output_grid = output_grid
 
         super(FlatInterpolationNode, self).__init__(gen)
+
+    def matching_identity(self):
+        raise Exception('No matching identity available.')
+
+    def matching_zero(self):
+        # ToDo: Create a proper ZeroNode between two grids 
+        return ZeroNode(self.output_grid) * self
 
 class NodeAdd(Node):
 
@@ -354,6 +372,20 @@ class NodeMul(Node):
 
     def compute_symbol(self):
         self._symbol = self._a._symbol * self._b._symbol
+
+    def matching_identity(self):
+        # ToDo: matching_identitys can be constructed from the properties.
+        # Hence a single implementation is sufficient. The same is true for
+        # matching_zero.
+        if isinstance(self.properties, SystemSymbolProperties):
+            return SystemNode.make_identity(self.properties.outputGrid(),
+                                            self.properties.rows(),
+                                            self.properties.cols())
+        else:
+            return IdentityNode(self.properties.outputGrid())
+
+    def matching_zero(self):
+        return self._a.matching_zero() * self._b.matching_zero()
 
 class NodeScalarMul(Node):
 
@@ -505,11 +537,10 @@ class SystemNode(Node,Splitable):
     def grid(self):
         return self._entries[0][0].grid
 
-    def matching_identity(self):
-        I = self._entries[0][0].matching_identity()
-        Z = self._entries[0][0].matching_zero()
-        assert(I is not None)
-        assert(Z is not None)
+    @staticmethod
+    def make_identity(grid, rows, cols):
+        I = IdentityNode(grid)
+        Z = ZeroNode(grid)
 
         def entry(i,j):
             if i == j:
@@ -518,10 +549,16 @@ class SystemNode(Node,Splitable):
                 return Z
 
         def row(i):
-            return [ entry(i,j) for j in range(self.properties.cols()) ]
+            return [ entry(i,j) for j in range(cols) ]
 
-        new_entries = [ row(i) for i in range(self.properties.rows()) ]
+        new_entries = [ row(i) for i in range(rows) ]
         return SystemNode(new_entries)
+
+    def matching_identity(self):
+        # ToDo: assert equal input and output
+        return SystemNode.make_identity(self.properties.inputGrid(),
+                                        self.properties.rows(),
+                                        self.properties.cols())
 
     def matching_zero(self):
         Z = self._entries[0][0].matching_zero()
